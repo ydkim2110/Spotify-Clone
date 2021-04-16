@@ -11,6 +11,8 @@ final class AuthMangaer {
     
     static let shared = AuthMangaer()
     
+    private var refreshingToken = false
+    
     struct Constants {
         static let clientID = "eea13cab6b8a4a6c9ab654afbc34c52e"
         static let clientSecret = "1c9da76fe08b4f26a573fba5a23a9164"
@@ -98,16 +100,52 @@ final class AuthMangaer {
         task.resume()
     }
     
-    public func refreshIfNeeded(completion: @escaping (Bool) -> Void) {
-//        guard shouldRefreshToken else {
-//            completion(true)
-//            return
-//        }
+    private var onRefreshBlock = [((String) ->Void)]()
+    
+    // Supplies valid token to be used with API Calls
+    public func withValidToken(completion: @escaping (String) -> Void) {
+        guard !refreshingToken else {
+            // Append the completion
+            onRefreshBlock.append(completion)
+            return
+        }
         
-        guard let refreshToken = self.refreshToken else { return }
+        if shouldRefreshToken {
+            // Refresh
+            print("DEBUG : shouldRefreshToken")
+            refreshIfNeeded { [weak self] success in
+                print("DEBUG : withValidToken success")
+                if success {
+                    if let token = self?.accessToken, success {
+                        completion(token)
+                    }
+                }
+            }
+        } else if let token = accessToken {
+            completion(token)
+        }
+    }
+    
+    public func refreshIfNeeded(completion: ((Bool) -> Void)?) {
+        guard !refreshingToken else {
+            return
+        }
+        
+        guard shouldRefreshToken else {
+            completion?(true)
+            return
+        }
+
+        guard let refreshToken = self.refreshToken else {
+            print("DEUBG : refreshingToken....")
+            return
+        }
      
-        // Rrefresh token
+        // Rrefresh the token
+        
         guard let url = URL(string: Constants.tokenAPIURL) else { return }
+        
+        refreshingToken = true
         
         var components = URLComponents()
         components.queryItems = [
@@ -125,27 +163,30 @@ final class AuthMangaer {
         
         guard let base64String = data?.base64EncodedString() else {
             print("DEBUG : Failure to base64")
-            completion(false)
+            completion?(false)
             return
         }
         
         request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            self?.refreshingToken = false
+            
             guard let data = data, error == nil else {
                 print("DEBUG : tak error!!!")
-                completion(false)
+                completion?(false)
                 return
             }
             
             do {
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
-                print("DEBUG : successfully refresh")
-                self.cacheToken(result: result)
-                completion(true)
+                self?.onRefreshBlock.forEach { $0(result.access_token) }
+                self?.onRefreshBlock.removeAll()
+                self?.cacheToken(result: result)
+                completion?(true)
             } catch {
                 print("DEBUG : Error is \(error.localizedDescription)")
-                completion(false)
+                completion?(false)
             }
         }
         task.resume()
