@@ -36,6 +36,7 @@
 		4985AD0726285509002D00A2 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4985AD0626285509002D00A2 /* Artist.swift */; };
 		4985AD0A26285511002D00A2 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4985AD0926285511002D00A2 /* UserProfile.swift */; };
 		4985AD0E2628616C002D00A2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4985AD0D2628616C002D00A2 /* Extensions.swift */; };
+		4996AE60262D07300099A97B /* RecommendationsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996AE5F262D07300099A97B /* RecommendationsResponse.swift */; };
 		E74BE5AE733C6CC912B1DF01 /* Pods_Spotify_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97802047BE0ECB8BAE03A6CB /* Pods_Spotify_Clone.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		4985AD0626285509002D00A2 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		4985AD0926285511002D00A2 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		4985AD0D2628616C002D00A2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		4996AE5F262D07300099A97B /* RecommendationsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsResponse.swift; sourceTree = "<group>"; };
 		97802047BE0ECB8BAE03A6CB /* Pods_Spotify_Clone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Spotify_Clone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B48B9E4FB21E36B237A1F6A0 /* Pods-Spotify Clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Spotify Clone.release.xcconfig"; path = "Target Support Files/Pods-Spotify Clone/Pods-Spotify Clone.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,6 +170,7 @@
 				496B68FA262AAFC300D67734 /* APIImage.swift */,
 				496B68FE262AB22A00D67734 /* FeaturedPlaylistsResponse.swift */,
 				496B6902262AB4C800D67734 /* RecommendedGenresResponse.swift */,
+				4996AE5F262D07300099A97B /* RecommendationsResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				4985ACFE262854E3002D00A2 /* HapticsManager.swift in Sources */,
 				496AA66F2629401300B69DCB /* AuthResponse.swift in Sources */,
 				496B68F8262AAF2300D67734 /* NewReleasesResponse.swift in Sources */,
+				4996AE60262D07300099A97B /* RecommendationsResponse.swift in Sources */,
 				4985AD04262854FC002D00A2 /* AudioTrack.swift in Sources */,
 				4985ACB8262851A2002D00A2 /* HomeViewController.swift in Sources */,
 				4985ACE226285447002D00A2 /* AuthViewController.swift in Sources */,
