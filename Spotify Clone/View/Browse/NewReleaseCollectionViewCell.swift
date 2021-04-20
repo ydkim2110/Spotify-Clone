@@ -94,7 +94,6 @@ class NewReleaseCollectionViewCell: UICollectionViewCell {
             height: 44
         )
         
-        numberOfTracksLabel.backgroundColor = .systemBlue
     }
     
     override func prepareForReuse() {
