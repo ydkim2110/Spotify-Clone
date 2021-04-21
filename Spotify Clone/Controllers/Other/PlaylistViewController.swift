@@ -9,7 +9,6 @@ import UIKit
 
 class PlaylistViewController: UIViewController {
 
-    
     private let playlist: Playlist
     
     private let collectionView = UICollectionView(
