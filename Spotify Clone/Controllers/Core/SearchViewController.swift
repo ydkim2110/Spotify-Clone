@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UISearchResultsUpdating {
+class SearchViewController: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     
     let searchController: UISearchController = {
@@ -47,6 +47,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         view.backgroundColor = .systemBackground
         
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         
         navigationItem.searchController = searchController
         
@@ -55,8 +56,6 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
-        
-        
         
         APICaller.shared.getCategories { [weak self] result in
             DispatchQueue.main.async {
@@ -77,16 +76,49 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         collectionView.frame = view.bounds
     }
  
-    func updateSearchResults(for searchController: UISearchController) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController,
-              let query = searchController.searchBar.text,
+              let query = searchBar.text,
               !query.trimmingCharacters(in: .whitespaces).isEmpty
         else {
             return
         }
-        print(query)
         
-        // Perform search
+        resultsController.delegate = self
+        
+        APICaller.shared.search(with: query) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let results):
+                    resultsController.update(with: results)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+
+    }
+}
+
+extension SearchViewController: SearchResultsViewControllerDelegate {
+    func didTapResult(_ result: SearchResult) {
+        switch result {
+        case .artist(let model):
+            break
+        case .album(let model):
+            let vc = AlbumViewController(album: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .track(let model):
+            break
+        case .playlist(let model):
+            let vc = PlaylistViewController(playlist: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 
